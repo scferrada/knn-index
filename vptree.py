@@ -55,18 +55,19 @@ chooses a better-than-random vantage-point,
 attempting to assure it divides the space evenly
 '''
 def select_vp(data, distance):
-	P = np.random.choice(data, np.ceil(len(data)*0.05), False)
+	N = int(np.min(np.ceil(len(data)*0.05), 100))
+	P = np.random.choice(data, N, False)
 	best_spread = 0
 	vp = P[0]
 	for pi in P:
-		D = np.random.choice(data, np.ceil(len(data)*0.05), False)
+		D = np.random.choice(data, N, False)
 		distances = distance(D[:,1:], pi[1:])
 		mu = np.median(distances)
 		spread = np.std(distances - mu)
 		if spread > best_spread:
 			best_spread = spread
 			vp = pi
-	return vp, np.vstack((data[:vp[0]], data[vp[0]+1:])) #no funciona
+	return vp, data[data[:, 0] != vp[0]]
 		
 '''
 This method buids a vantage-point tree, given a numpy matrix.
