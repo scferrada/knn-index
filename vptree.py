@@ -1,5 +1,6 @@
 import numpy as np
 from heapq import heappush, heappushpop
+import matplotlib.pyplot as plt
 
 '''
 This Class holds the nodes of a vantage-point tree.
@@ -22,7 +23,7 @@ class Node:
 		return False
 		
 class Leaf:
-	def __init__(self, points, minp, maxp)
+	def __init__(self, points, minp, maxp):
 		self.points = points
 		self.minp = minp
 		self.maxp = maxp
@@ -107,7 +108,7 @@ def search_internal(n, x, k, distance, results):
 				heappush(results, Res(p[0], d))
 			elif d < results[0].dist:
 				heappushpop(results, Res(p[0], d)
-		#return results
+		return
 	d = distance(n.vp, x)
 	if len(results) < k:
 		heappush(results, Res(p[0], d))
@@ -124,4 +125,23 @@ def search_internal(n, x, k, distance, results):
 			search_internal(n.R, x, k, distance, results)
 		if n.L.minp - results[0].dist < d and d < n.L.maxp + results[0].dist:
 			search_internal(n.L, x, k, distance, results)
-	#return results
+	
+def visualize(tree):
+	points = []
+	circles = []
+	visualize_internal(tree, points, circles)
+	ax = plt.gca()
+	ax.scatter([x[0] for x in points], [x[1] for x in points])
+	for c in circles:
+		ax.add_artist(c)
+	plt.show()
+	
+def visualize_internal(tree, points, circles):
+	if tree.is_leaf():
+		points.extend([p for p in tree.points])
+		return
+	points.append(tree.vp)
+	circles.append(plt.Circle((tree.vp[0], tree.vp[1]), tree.mu, fill=False))
+	visualize_internal(tree.L, points, circles)
+	visualize_internal(tree.R, points, circles)
+	
