@@ -1,8 +1,8 @@
 import vptree as vp 
 import numpy as np
 
-np.random.seed(0)
-data = np.random.rand(2, 100)
+np.random.seed(3)
+data = np.random.rand(100, 2)
 
 tree = vp.build_tree(data)
 
